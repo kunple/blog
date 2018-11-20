@@ -1,0 +1,501 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="kunple">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://kunple.github.io">
+    <!--SEO-->
+
+<meta name="description" content="技术博客">
+
+
+
+<meta name="keywords" content="Java、Spring、Linux、Python、OpenResty、Arduino">
+
+
+
+<meta name="robots" content="all">
+<meta name="google" content="all">
+<meta name="googlebot" content="all">
+<meta name="verify" content="all">
+    <!--Title-->
+
+
+<title>log4j配置及组件详解 | kunple</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="kunple" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+	<div class="hide">
+		<script type="text/javascript">
+			var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan class='cnzz_stat_icon_1263868967 hide' %3E%3Cscript%20src%3D%22https%3A%2F%2Fs95.cnzz.com%2Fz_stat.php%3Fweb_id%3D1272564536%22%3E%3C%2Fscript%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s19.cnzz.com/z_stat.php%3Fid%3D1263868967%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+	</div>
+
+
+
+
+
+
+    
+
+</head>
+
+</html>
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    <header class="main-header" style="background-image:url(http://snippet.shenliyang.com/img/banner.jpg)">
+    <div class="main-header-box">
+        <a class="header-avatar" href="/" title="石鹏">
+            <img src="/img/avatar.jpg" alt="logo头像" class="img-responsive center-block">
+        </a>
+        <div class="branding">
+        	<!--<h2 class="text-hide">Snippet主题,从未如此简单有趣</h2>-->
+            
+                <h2> 石鹏的博客！ </h2>
+            
+    	</div>
+    </div>
+</header>
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="http://kunple.github.io">kunple</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa "></i>首页</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories/程序设计/"><i class="fa "></i>程序设计</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories/技术杂谈/"><i class="fa "></i>技术杂谈</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories/"><i class="fa "></i>读书生活</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives/"><i class="fa "></i>时间轴</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="log4j配置及组件详解">
+            
+	            log4j配置及组件详解
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/程序设计">
+            程序设计
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/java" title="java">
+                        java
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2018/11/09</span>
+        </span>
+        
+    
+</div>
+
+            
+            
+    </div>
+    
+    <div class="post-body post-content">
+        <blockquote>
+<p>Log4j是Apache的一个开源项目，通过使用Log4j，我们可以控制日志信息输送的目的地(控制台、文件、GUI组件，甚至是套接口服务器)，我们也可以控制每一条日志的输出格式；通过定义每一条日志信息的级别，我们能够更加细致地控制日志的生成过程。最令人感兴趣的就是，这些可以通过一个配置文件来灵活地进行配置，而不需要修改应用的代码。—<a href="http://baike.baidu.com/link?url=_YwK8eo6J31oDpAgU3WJmgqOBzYj7ylpKiVw2NdgjZAsKCBeToRERnLl9a45nJ5xhSCwyuhqnlA3by4LbqrUia" target="_blank" rel="noopener">百度百科</a></p>
+</blockquote>
+<h2 id="一、Log4j基本用法"><a href="#一、Log4j基本用法" class="headerlink" title="一、Log4j基本用法"></a><strong>一、Log4j基本用法</strong></h2><h3 id="1-添加log4j依赖-添加Log4j包"><a href="#1-添加log4j依赖-添加Log4j包" class="headerlink" title="1. 添加log4j依赖(添加Log4j包)"></a><strong>1. 添加log4j依赖(添加Log4j包)</strong></h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>log4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>log4j<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.16<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-在相关业务类中创建Logger对象"><a href="#2-在相关业务类中创建Logger对象" class="headerlink" title="2. 在相关业务类中创建Logger对象"></a><strong>2. 在相关业务类中创建Logger对象</strong></h3><h4 id="2-1创建Logger对象有两种方式，第一种是通过当前类的Class对象创建。"><a href="#2-1创建Logger对象有两种方式，第一种是通过当前类的Class对象创建。" class="headerlink" title="2.1创建Logger对象有两种方式，第一种是通过当前类的Class对象创建。"></a>2.1创建Logger对象有两种方式，第一种是通过当前类的Class对象创建。</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//用当前类创建Logger对象</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger logger = Logger.getLogger(UserService.class);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">userAdd</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//省略内容...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-2第二种方式则通过自定义名称创建。-不建议采用该方式"><a href="#2-2第二种方式则通过自定义名称创建。-不建议采用该方式" class="headerlink" title="2.2第二种方式则通过自定义名称创建。(不建议采用该方式)"></a>2.2第二种方式则通过自定义名称创建。<strong>(不建议采用该方式)</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//用当前类创建Logger对象</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger logger = Logger.getLogger(<span class="string">"test"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">userAdd</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//省略内容...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-在业务代码中添加日志输出代码"><a href="#3-在业务代码中添加日志输出代码" class="headerlink" title="3. 在业务代码中添加日志输出代码"></a><strong>3. 在业务代码中添加日志输出代码</strong></h3><p>根据系统中日志信息的重要程度，选择logger对象不同的级别进行记录，log4j会根据配置文件(log4j.properties)中配置的日志级别来输入对应的日志。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">userAdd</span><span class="params">()</span></span>&#123;</span><br><span class="line">    logger.debug(<span class="string">"记录Debug级别信息......"</span>);</span><br><span class="line">    logger.info (<span class="string">"记录Info级别信息......"</span>);</span><br><span class="line">    logger.warn (<span class="string">"记录Warn级别信息......"</span>);</span><br><span class="line">    logger.error(<span class="string">"记录Error级别信息......"</span>);</span><br><span class="line">    logger.fatal(<span class="string">"记录fatal级别信息......"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h3 id="4-添加Log4j配置文件"><a href="#4-添加Log4j配置文件" class="headerlink" title="4. 添加Log4j配置文件"></a><strong>4. 添加Log4j配置文件</strong></h3><p>Log4j中组件是通过属性文件进行配置的，该文件默认名称为<code>log4j.properties</code>，默认路径在<code>src</code>根目录下，在web项目中，通过在<code>web.xml</code>文件中添加log4jConfigLocation属性来修改配置文件名称及路径。</p>
+<h4 id="4-1-web-xml中修改log4j-properties文件名称及路径"><a href="#4-1-web-xml中修改log4j-properties文件名称及路径" class="headerlink" title="4.1 web.xml中修改log4j.properties文件名称及路径"></a>4.1 web.xml中修改log4j.properties文件名称及路径</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context-param</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>log4jConfigLocation<span class="tag">&lt;/<span class="name">param-name</span> &gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>classpath:log4j.properties<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">context-param</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="4-2-log4j-properties文件配置示例"><a href="#4-2-log4j-properties文件配置示例" class="headerlink" title="4.2 log4j.properties文件配置示例"></a>4.2 log4j.properties文件配置示例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">######配置输出日志的目录和输出日志的级别##########</span><br><span class="line">#rootLogger:设置输出根目录(classpath)下所有配置了Logger对象的日志</span><br><span class="line">#第一个参数Debug: 输出什么级别的日志</span><br><span class="line">#第二个参数stout: 输出哪个Appender(可配置多个Appender，如:DF_DEBUG,DF_ERROR)</span><br><span class="line">#log4j.logger.cn.ship.log4j=warn,stout :输出cn.ship.log4j包下的配置了Logger对象的日志，如果指定包下的日志级别小于rootLogger，则指定包下的日志按当前配置级别输出</span><br><span class="line">#log4j.logger.test = warn,stout:基于Logger名称的访问,需要在创建logger对象的时候用名称指定(参见创建Logger第二种形式)</span><br><span class="line">#############################################</span><br><span class="line"></span><br><span class="line">log4j.rootLogger=debug,stout,DF_DEBUG,DF_ERROR</span><br><span class="line">log4j.logger.cn.ship.log4j=warn,stout</span><br><span class="line">log4j.logger.test = warn,stout</span><br><span class="line"></span><br><span class="line">##################控制台输出##################</span><br><span class="line">#log4j.appender.stout : 指定采用那种方式进行日志输出(控制台方式)，stout为用户自定义appender名称</span><br><span class="line">#log4j.appender.stout.Target : 采用System.out方式进行输出，还可以使用System.err</span><br><span class="line">#log4j.appender.stout.layout : 指定当前Appender的日志的布局模式(当前选用PatternLayout模式)</span><br><span class="line">#log4j.appender.stout.layout.ConversionPattern : 指定PatternLayout模式的日志格式</span><br><span class="line">############################################</span><br><span class="line"></span><br><span class="line">log4j.appender.stout=org.apache.log4j.ConsoleAppender</span><br><span class="line">log4j.appender.stout.Target=System.out</span><br><span class="line">log4j.appender.stout.layout=org.apache.log4j.PatternLayout</span><br><span class="line">log4j.appender.stout.layout.ConversionPattern= [%5p] %d&#123;yyyy-MM-dd HH:mm:ss,SSS&#125; method:%l%n%m%n</span><br><span class="line"></span><br><span class="line">##################滚动文件输出(DEBUG级别)##################</span><br><span class="line">log4j.appender.DF_DEBUG=org.apache.log4j.DailyRollingFileAppender</span><br><span class="line">log4j.appender.DF_DEBUG.File=/home/ship/log/debug.log</span><br><span class="line">log4j.appender.DF_DEBUG.Threshold=DEBUG</span><br><span class="line">log4j.appender.DF_DEBUG.DatePattern=&apos;.&apos;yyyy-MM-dd&apos;</span><br><span class="line">log4j.appender.DF_DEBUG.layout=org.apache.log4j.PatternLayout</span><br><span class="line">log4j.appender.DF_DEBUG.layout.ConversionPattern=%d&#123;yyyy-MM-dd HH:mm:ss&#125; [ %t:%r ] - [ %p ]  %m%n</span><br><span class="line"></span><br><span class="line">##################滚动文件输出(ERROR级别)##################</span><br><span class="line">log4j.appender.DF_ERROR=org.apache.log4j.DailyRollingFileAppender</span><br><span class="line">log4j.appender.DF_ERROR.File=/home/ship/log/error.log</span><br><span class="line">log4j.appender.DF_ERROR.Threshold=ERROR</span><br><span class="line">log4j.appender.DF_ERROR.DatePattern=&apos;.&apos;yyyy-MM-dd&apos;</span><br><span class="line">log4j.appender.DF_ERROR.layout=org.apache.log4j.PatternLayout</span><br><span class="line">log4j.appender.DF_ERROR.layout.ConversionPattern=%d&#123;yyyy-MM-dd HH:mm:ss&#125; [ %t:%r ] - [ %p ]  %m%n</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="二、Log4j组件"><a href="#二、Log4j组件" class="headerlink" title="二、Log4j组件"></a><strong>二、Log4j组件</strong></h2><img src="/2018/11/09/log4j配置及组件详解/log4j.png" title="log4j">
+<p>通过log4j结构图可以看出Log4j分别由Logger(日志写入器)、日志输出终端(Appender)、日志布局模式(Layout)三个重要组件构成。其中一个Logger对应多个Appender，一个Appender包含一种日志布局模式。</p>
+<h3 id="1-日志写入器-Logger"><a href="#1-日志写入器-Logger" class="headerlink" title="1. 日志写入器(Logger)"></a><strong>1. 日志写入器(Logger)</strong></h3><p>Logger主要负责记录日志信息，根据日志信息的重要程度，Logger对象共分为以下几种日志级别，从高到底分别为:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">日志级别</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">OFF</td>
+<td style="text-align:center">最高等级，用于关闭所有的日志记录</td>
+</tr>
+<tr>
+<td style="text-align:center">FATAL</td>
+<td style="text-align:center">指出每个严重的错误事件将会导致应用程序的退出</td>
+</tr>
+<tr>
+<td style="text-align:center">ERROR</td>
+<td style="text-align:center">指出虽然发生错误事件，但仍然不影响系统的继续允许</td>
+</tr>
+<tr>
+<td style="text-align:center">WARN</td>
+<td style="text-align:center">指出会出现潜在的错误情形</td>
+</tr>
+<tr>
+<td style="text-align:center">INFO</td>
+<td style="text-align:center">一般用于粗粒度级别上，强调应用程序的运行全程</td>
+</tr>
+<tr>
+<td style="text-align:center">DEBUG</td>
+<td style="text-align:center">一般用于细粒度级别上，对于调式程序非常有帮助</td>
+</tr>
+<tr>
+<td style="text-align:center">ALL</td>
+<td style="text-align:center">最低等级，用于打开所有日志记录</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Log4j建议只使用四个级别，优先级从高到低分别是：ERROR、WARN、INFO、DEBUG。通过在这里定义级别，你可以控制应用程序中相应级别的日志信息的开关。</strong></p>
+<h3 id="2-日志输出终端-Appender"><a href="#2-日志输出终端-Appender" class="headerlink" title="2. 日志输出终端(Appender)"></a><strong>2. 日志输出终端(Appender)</strong></h3><p><strong>Appender用于配置日志信息输出的目的地，Log4j提供了一下几种Appender对象:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Appender对象</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">org.apache.log4j.ConsoleAppender</td>
+<td style="text-align:center">输入至控制台</td>
+</tr>
+<tr>
+<td style="text-align:center">org.apache.log4j.FileAppender</td>
+<td style="text-align:center">输入至文件</td>
+</tr>
+<tr>
+<td style="text-align:center">org.apache.log4j.DailyRollingFileAppender</td>
+<td style="text-align:center">输入至文件(按照指定时间生成文件)</td>
+</tr>
+<tr>
+<td style="text-align:center">org.apache.log4j.RollingFileAppender</td>
+<td style="text-align:center">输入至文件(按照指定文件大小生成文件)</td>
+</tr>
+<tr>
+<td style="text-align:center">org.apache.log4j.WriterAppende</td>
+<td style="text-align:center">将日志信息以流的方式发送到指定地点</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-日志布局模式-Layout"><a href="#3-日志布局模式-Layout" class="headerlink" title="3. 日志布局模式(Layout)"></a><strong>3. 日志布局模式(Layout)</strong></h3><h4 id="3-1-Layout负责控制日志信息输出格式，Log4j提供了以下几种布局模式："><a href="#3-1-Layout负责控制日志信息输出格式，Log4j提供了以下几种布局模式：" class="headerlink" title="3.1 Layout负责控制日志信息输出格式，Log4j提供了以下几种布局模式："></a>3.1 Layout负责控制日志信息输出格式，Log4j提供了以下几种布局模式：</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">Layout对象</th>
+<th style="text-align:center">对象说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">org.apache.log4j.HTMLLayout</td>
+<td style="text-align:center">已HTML表格形式布局</td>
+</tr>
+<tr>
+<td style="text-align:center">org.apache.log4j.PatternLayout</td>
+<td style="text-align:center">可以灵活地自定义布局</td>
+</tr>
+<tr>
+<td style="text-align:center">org.apache.log4j.SimpleLayout</td>
+<td style="text-align:center">包含日志信息的级别和消息字符串的简单布局</td>
+</tr>
+<tr>
+<td style="text-align:center">org.apache.log4j.TTCCLayout</td>
+<td style="text-align:center">包含日志产生的时间、线程、类别等等信息</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3-2-如果采用PatternLayout模式，则可以通过如下参数来自定义日志格式"><a href="#3-2-如果采用PatternLayout模式，则可以通过如下参数来自定义日志格式" class="headerlink" title="3.2 如果采用PatternLayout模式，则可以通过如下参数来自定义日志格式:"></a>3.2 如果采用PatternLayout模式，则可以通过如下参数来自定义日志格式:</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">参 数</th>
+<th style="text-align:center">说 明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">%m</td>
+<td style="text-align:center">输入代码中指定的消息</td>
+</tr>
+<tr>
+<td style="text-align:center">%p</td>
+<td style="text-align:center">输出优先级，即DEBUG，INFO，WARN，ERROR</td>
+</tr>
+<tr>
+<td style="text-align:center">%r</td>
+<td style="text-align:center">输出自应用启动到输出该log消息耗费的毫秒数</td>
+</tr>
+<tr>
+<td style="text-align:center">%c</td>
+<td style="text-align:center">输出所属的类目，通常就是所在类的全名</td>
+</tr>
+<tr>
+<td style="text-align:center">%t</td>
+<td style="text-align:center">输出产生该日志事件的线程名</td>
+</tr>
+<tr>
+<td style="text-align:center">%n</td>
+<td style="text-align:center">输出一个回车换行符</td>
+</tr>
+<tr>
+<td style="text-align:center">%d</td>
+<td style="text-align:center">输出日志时间点的日期或时间，默认格式为ISO8601，也可以在其后指定格式，比如%d{yyyy-MM-dd HH:mm:ss,SSS}</td>
+</tr>
+<tr>
+<td style="text-align:center">%l</td>
+<td style="text-align:center">输出日志事件的发生位置，包括类名，发生的线程，以及在代码中的函数</td>
+</tr>
+<tr>
+<td style="text-align:center">%x</td>
+<td style="text-align:center">输出和当前线程相关联的NDC（嵌套诊断环境），尤其用到像Java Servlet这样的多客户多线程的应用中</td>
+</tr>
+<tr>
+<td style="text-align:center">%%</td>
+<td style="text-align:center">输出一个”%”字符</td>
+</tr>
+<tr>
+<td style="text-align:center">%F</td>
+<td style="text-align:center">输出日志消息产生时所在的文件名称</td>
+</tr>
+<tr>
+<td style="text-align:center">%L</td>
+<td style="text-align:center">输出代码中的行号</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3-3-我们也可以通过在百分号-与模式字符之间加上修饰符来控制最小宽度、最大宽度和对齐方式，如下："><a href="#3-3-我们也可以通过在百分号-与模式字符之间加上修饰符来控制最小宽度、最大宽度和对齐方式，如下：" class="headerlink" title="3.3 我们也可以通过在百分号(%)与模式字符之间加上修饰符来控制最小宽度、最大宽度和对齐方式，如下："></a>3.3 我们也可以通过在百分号(%)与模式字符之间加上修饰符来控制最小宽度、最大宽度和对齐方式，如下：</h4><blockquote>
+<ul>
+<li>%20c : 指定输出category的名称，最小宽度是20，如果category的名称小于20的话，默认右对齐。</li>
+<li>%-20c : 指定输出category的名称，最小宽度是20，如果category的名称小于20的花，“-”号指定左对齐。</li>
+<li>%.30c : 指定输出category的名称，最大宽度是30，如果category的名称大于30的话，就会将左边多出的字符截掉，但小于30的话也不会有空格。</li>
+<li>%20.30c : 如果category的名称小于20就补空格，并且右对齐，如果其名称大于30， 就将左边多出的字符截掉。</li>
+</ul>
+</blockquote>
+
+    </div>
+    
+        <div class="reward">
+    <div class="reward-wrap">赏
+        <div class="reward-box">
+            
+            
+                <span class="reward-type">
+                    <img class="wechat" src="../img/reward-wepay.jpg"><b>微信打赏</b>
+                </span>
+            
+        </div>
+    </div>
+    <p class="reward-tip">赞赏是不耍流氓的鼓励</p>
+</div>
+
+
+    
+    <div class="post-footer">
+        <div>
+            
+                转载声明：商业转载请联系作者获得授权,非商业转载请注明出处 © <a href="" target="_blank">Snippet</a>
+            
+        </div>
+        <div>
+            
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/2018/11/09/Ubuntu下Samba安装配置及使用/" class="pre-post btn btn-default" title="Ubuntu下Samba安装配置及使用">
+            <i class="fa fa-angle-left fa-fw"></i><span class="hidden-lg">上一篇</span>
+            <span class="hidden-xs">Ubuntu下Samba安装配置及使用</span>
+        </a>
+    
+    
+        <a href="/2018/11/08/java-static关键字/" class="next-post btn btn-default" title="java static关键字">
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">java static关键字</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+    <div id="comments">
+        
+    
+    <div id="vcomments" class="valine"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="/assets/valine.min.js"></script>
+
+    <script>
+        new Valine({
+            av: AV,
+            el: '#vcomments',
+            appId: 'xOKV9J4UeQAtVkvnJC7Kq2Jn-gzGzoHsz',
+            appKey: 'erIpQac4azoCmgfBB7Dl9maa',
+            placeholder: '说点什么吧',
+            notify: false,
+            verify: false,
+            avatar: 'mm',
+            meta: 'nick,mail'.split(','),
+            pageSize: '10',
+            path: window.location.pathname,
+            lang: 'zh-CN'.toLowerCase()
+        })
+    </script>
+
+
+    </div>
+
+
+
+
+
+                </main>
+                
+                    <aside id="article-toc" role="navigation" class="col-md-4">
+    <div class="widget">
+        <h3 class="title">文章目录</h3>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一、Log4j基本用法"><span class="toc-text">一、Log4j基本用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-添加log4j依赖-添加Log4j包"><span class="toc-text">1. 添加log4j依赖(添加Log4j包)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-在相关业务类中创建Logger对象"><span class="toc-text">2. 在相关业务类中创建Logger对象</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1创建Logger对象有两种方式，第一种是通过当前类的Class对象创建。"><span class="toc-text">2.1创建Logger对象有两种方式，第一种是通过当前类的Class对象创建。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2第二种方式则通过自定义名称创建。-不建议采用该方式"><span class="toc-text">2.2第二种方式则通过自定义名称创建。(不建议采用该方式)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-在业务代码中添加日志输出代码"><span class="toc-text">3. 在业务代码中添加日志输出代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-添加Log4j配置文件"><span class="toc-text">4. 添加Log4j配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-web-xml中修改log4j-properties文件名称及路径"><span class="toc-text">4.1 web.xml中修改log4j.properties文件名称及路径</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-log4j-properties文件配置示例"><span class="toc-text">4.2 log4j.properties文件配置示例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二、Log4j组件"><span class="toc-text">二、Log4j组件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-日志写入器-Logger"><span class="toc-text">1. 日志写入器(Logger)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-日志输出终端-Appender"><span class="toc-text">2. 日志输出终端(Appender)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-日志布局模式-Layout"><span class="toc-text">3. 日志布局模式(Layout)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-Layout负责控制日志信息输出格式，Log4j提供了以下几种布局模式："><span class="toc-text">3.1 Layout负责控制日志信息输出格式，Log4j提供了以下几种布局模式：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-如果采用PatternLayout模式，则可以通过如下参数来自定义日志格式"><span class="toc-text">3.2 如果采用PatternLayout模式，则可以通过如下参数来自定义日志格式:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-我们也可以通过在百分号-与模式字符之间加上修饰符来控制最小宽度、最大宽度和对齐方式，如下："><span class="toc-text">3.3 我们也可以通过在百分号(%)与模式字符之间加上修饰符来控制最小宽度、最大宽度和对齐方式，如下：</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+</aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+                <span>Copyright &copy; 2017
+                </span> |
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/shenliyang/hexo-theme-snippet.git" class="copyright-links" target="_blank" rel="nofollow">Snippet</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>

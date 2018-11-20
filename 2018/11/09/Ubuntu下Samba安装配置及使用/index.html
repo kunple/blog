@@ -1,0 +1,354 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="kunple">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://kunple.github.io">
+    <!--SEO-->
+
+<meta name="description" content="技术博客">
+
+
+
+<meta name="keywords" content="Java、Spring、Linux、Python、OpenResty、Arduino">
+
+
+
+<meta name="robots" content="all">
+<meta name="google" content="all">
+<meta name="googlebot" content="all">
+<meta name="verify" content="all">
+    <!--Title-->
+
+
+<title>Ubuntu下Samba安装配置及使用 | kunple</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="kunple" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+	<div class="hide">
+		<script type="text/javascript">
+			var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan class='cnzz_stat_icon_1263868967 hide' %3E%3Cscript%20src%3D%22https%3A%2F%2Fs95.cnzz.com%2Fz_stat.php%3Fweb_id%3D1272564536%22%3E%3C%2Fscript%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s19.cnzz.com/z_stat.php%3Fid%3D1263868967%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+	</div>
+
+
+
+
+
+
+    
+
+</head>
+
+</html>
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    <header class="main-header" style="background-image:url(http://snippet.shenliyang.com/img/banner.jpg)">
+    <div class="main-header-box">
+        <a class="header-avatar" href="/" title="石鹏">
+            <img src="/img/avatar.jpg" alt="logo头像" class="img-responsive center-block">
+        </a>
+        <div class="branding">
+        	<!--<h2 class="text-hide">Snippet主题,从未如此简单有趣</h2>-->
+            
+                <h2> 石鹏的博客！ </h2>
+            
+    	</div>
+    </div>
+</header>
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="http://kunple.github.io">kunple</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa "></i>首页</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories/程序设计/"><i class="fa "></i>程序设计</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories/技术杂谈/"><i class="fa "></i>技术杂谈</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories/"><i class="fa "></i>读书生活</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives/"><i class="fa "></i>时间轴</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="Ubuntu下Samba安装配置及使用">
+            
+	            Ubuntu下Samba安装配置及使用
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/技术杂谈">
+            技术杂谈
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/linux" title="linux">
+                        linux
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2018/11/09</span>
+        </span>
+        
+    
+</div>
+
+            
+            
+    </div>
+    
+    <div class="post-body post-content">
+        <h3 id="samba简介"><a href="#samba简介" class="headerlink" title="samba简介:"></a><strong>samba简介:</strong></h3><blockquote>
+<p>Samba在Linux和UNIX系统上实现SMB协议的一个免费软件，由服务器及客户端程序构成。SMB（Server Messages Block，信息服务块）是一种在局域网上共享文件和打印机的一种通信协议，它为局域网内的不同计算机之间提供文件及打印机等资源的共享服务。SMB协议是客户机/服务器型协议，客户机通过该协议可以访问服务器上的共享文件系统、打印机及其他资源。通过设置“NetBIOS over TCP/IP”使得Samba不但能与局域网络主机分享资源，还能与全世界的电脑分享资源。   —<a href="http://baike.baidu.com/link?url=uZachbZqEGe8511bXPyd-lAOJ_2QNs4LECxKxSSfKEdhk3S2HcATv24XXCtagmqZcK0KWvwn2n__U7E0slFsvq" target="_blank" rel="noopener">百度百科</a></p>
+</blockquote>
+<hr>
+<h3 id="一、Samba服务器安装及配置"><a href="#一、Samba服务器安装及配置" class="headerlink" title="一、Samba服务器安装及配置"></a><strong>一、Samba服务器安装及配置</strong></h3><h4 id="1-安装samba服务"><a href="#1-安装samba服务" class="headerlink" title="1.安装samba服务"></a><strong>1.安装samba服务</strong></h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install samba</span><br></pre></td></tr></table></figure>
+<h4 id="2-备份samba配置文件"><a href="#2-备份samba配置文件" class="headerlink" title="2.备份samba配置文件"></a><strong>2.备份samba配置文件</strong></h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo cp /etc/samba/smb.conf /etc/samba/smb.conf.bak</span><br></pre></td></tr></table></figure>
+<h4 id="3-创建共享目录"><a href="#3-创建共享目录" class="headerlink" title="3.创建共享目录"></a><strong>3.创建共享目录</strong></h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo mkdir -p  /home/shipeng/share</span><br><span class="line">$ sudo chmod 777 /home/shipeng/share  <span class="comment">#修改共享目录访问权限</span></span><br></pre></td></tr></table></figure>
+<h4 id="4-修改配置文件-sudo-vim-etc-samba-smb-conf"><a href="#4-修改配置文件-sudo-vim-etc-samba-smb-conf" class="headerlink" title="4.修改配置文件 $ sudo vim /etc/samba/smb.conf"></a><strong>4.修改配置文件</strong> <code>$ sudo vim /etc/samba/smb.conf</code></h4><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">####################按照如下配置添加至文件末尾####################</span><br><span class="line">[share]</span><br><span class="line">comment=欢迎访问samba服务器      #该共享的备注</span><br><span class="line">path=/home/shipeng/share       #共享的目录</span><br><span class="line">public=yes                     #指定共享资源是否可供游客账户访问(yes|<span class="keyword">no</span>)</span><br><span class="line">wriable=yes                    #指定共享目录是否可写.可选值(yes|<span class="keyword">no</span>)</span><br><span class="line">available=yes				   #设置共享目录是否可用.可选值(yes|<span class="keyword">no</span>)</span><br><span class="line">browseable=yes                 #设置共享目录是否可显示(网络邻居中是否可看到).可选值(yes|<span class="keyword">no</span>)</span><br><span class="line">user=user1,@group1             #设置所有可能使用该共享资源的用户,@group表示这个组所有成员</span><br><span class="line">valid   users=user1,@group1    #指定能够使用该共享资源的用户和组</span><br><span class="line">invalid users=user1,@group1    #指定不能够使用该共享资源的用户和组</span><br><span class="line"><span class="keyword">read</span>  <span class="keyword">list</span>=user1,@group1       #指定只能够读取共享资源的用户和组</span><br><span class="line"><span class="keyword">write</span> <span class="keyword">list</span>=user1,@group1       #指定能够读取和写入共享资源的用户和组</span><br><span class="line">allow hosts=<span class="number">172.18</span>.<span class="number">24.100</span>      #允许访问的主机列表,支持通配符</span><br><span class="line">deny  hosts=<span class="number">172.18</span>.<span class="number">24.101</span>      #禁止访问的主机列表,支持通配符</span><br><span class="line"><span class="built_in">max</span> connections=<span class="number">100</span>            #设置最大同时连接数</span><br></pre></td></tr></table></figure>
+<h4 id="5-samba服务相关命令"><a href="#5-samba服务相关命令" class="headerlink" title="5.samba服务相关命令"></a><strong>5.samba服务相关命令</strong></h4><p><code>sudo /etc/init.d/samba start</code>        启动samba服务<br><code>sudo /etc/init.d/samba stop</code>           关闭samba服务<br><code>sudo /etc/init.d/samba restart</code>    重启samba服务</p>
+<h4 id="6-samba服务器卸载"><a href="#6-samba服务器卸载" class="headerlink" title="6.samba服务器卸载"></a><strong>6.samba服务器卸载</strong></h4><p><code>apt-get remove samba</code><br><code>apt-get remove sambaclient</code><br><code>apt-get remove samba-common</code></p>
+<hr>
+<h3 id="二、Samba用户管理"><a href="#二、Samba用户管理" class="headerlink" title="二、Samba用户管理"></a><strong>二、Samba用户管理</strong></h3><h4 id="一、创建samba用户"><a href="#一、创建samba用户" class="headerlink" title="一、创建samba用户"></a><strong>一、创建samba用户</strong></h4><blockquote>
+<p><strong>提示:</strong>创建samba用户之前,必须确保系统中存在一个同名用户,否则samba用户则创建无效</p>
+</blockquote>
+<p>1.创建Linux用户 <code>sudo useradd user1</code>,由于该用户没有被赋予登录密码,所以该用户只能从远程访问而不能登录。<br>2.创建samba用户。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo touch /etc/samba/smbpasswd  <span class="comment">#由于用户保存在smbpasswd文件中,所以首先判断该文件是否存在。</span></span><br><span class="line">$ sudo smbpasswd -a user1          <span class="comment">#添加user1用户,(按照提示输入user1的samba访问密码)。</span></span><br></pre></td></tr></table></figure></p>
+<p>3.smbpasswd相关命令<br> <code>smbpasswd -a user</code>  新增samba用户(确保用户是系统用户)<br> <code>smbpasswd -d user</code>  冻结用户,冻结的用户则不能进行访问<br> <code>smbpasswd -e user</code>  恢复用户,让冻结的用户可以正常访问<br> <code>smbpasswd -n user</code>  设置用户密码为空(确保global下 null passwords -true)<br> <code>smbpasswd -x user</code>  删除samba用户</p>
+<p>####<strong>二、samba帐号映射</strong></p>
+<blockquote>
+<p>samba服务器帐号必须对应一个同名的系统帐号,基于这一点,对于hacker(黑客)来说,只要samba服务器的samba帐号,就等于知道了Linux系统帐号,所以我们要使用用户帐号映射这个功能来解决这个问题。用户帐号映射这个功能需要建立一个帐号映射关系表,里面记录了samba帐号和虚拟帐号的对应关系,客户端来访问samba服务器时就使用虚拟帐号来登录。</p>
+</blockquote>
+<p>1.编辑smb.conf配置文件,在global中开启用户帐号映射功能。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ sudo vim /etc/samba/smb.conf</span><br><span class="line"></span><br><span class="line">[global]</span><br><span class="line">省略...</span><br><span class="line">username map = /etc/samba/smbusers</span><br><span class="line">省略...</span><br></pre></td></tr></table></figure></p>
+<p>2.编辑smbusers文件,按照如下格式配置用户映射。<br>       <code>samba帐号=虚拟帐号</code><br>3.重启samba服务,完成虚拟用户映射。</p>
+<hr>
+<h3 id="三、客户端访问-ubuntu"><a href="#三、客户端访问-ubuntu" class="headerlink" title="三、客户端访问(ubuntu)"></a><strong>三、客户端访问(ubuntu)</strong></h3><p>1.安装samba客户端组件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install cifs-utils</span><br></pre></td></tr></table></figure></p>
+<p>2.在本地创建一个目录用于挂载samba共享目录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir /home/shipeng/nas</span><br></pre></td></tr></table></figure></p>
+<p>3.使用挂载命令挂载samba共享目录<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -t cifs  代表使用SMB文件系统</span></span><br><span class="line"><span class="comment"># -o 参数1,参数2,参数3</span></span><br><span class="line"><span class="comment">#	 guest(代表匿名访问,即使用guest来宾账户)</span></span><br><span class="line"><span class="comment">#    user (表示用户名)</span></span><br><span class="line"><span class="comment">#    pass (表示密码)		 </span></span><br><span class="line"><span class="comment">#    iocharset=utf8（可避免中文乱码）</span></span><br><span class="line">sudo mount -t cifs //172.18.24.98/share  /home/shipeng/nas -o guest</span><br></pre></td></tr></table></figure></p>
+<p><strong>到此!samba共享目录已经挂载完毕,通过访问挂载目录[/home/shipeng/nas]来访问共享资源</strong></p>
+<p>4.如使用完毕需要卸载<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">umount /home/shipeng/nas</span><br></pre></td></tr></table></figure></p>
+<p>5.如需开机自动挂载samba共享目录则需编辑 fstab<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/fstab</span><br><span class="line"><span class="comment">#在fstab中加入如下代码</span></span><br><span class="line">//172.18.24.98/share  /home/shipeng/nas cifs iocharset=utf8 0 0</span><br><span class="line"><span class="comment">#保存后退出,并执行自动挂载命令</span></span><br><span class="line">sudo mount -a</span><br></pre></td></tr></table></figure></p>
+<hr>
+
+    </div>
+    
+        <div class="reward">
+    <div class="reward-wrap">赏
+        <div class="reward-box">
+            
+            
+                <span class="reward-type">
+                    <img class="wechat" src="../img/reward-wepay.jpg"><b>微信打赏</b>
+                </span>
+            
+        </div>
+    </div>
+    <p class="reward-tip">赞赏是不耍流氓的鼓励</p>
+</div>
+
+
+    
+    <div class="post-footer">
+        <div>
+            
+                转载声明：商业转载请联系作者获得授权,非商业转载请注明出处 © <a href="" target="_blank">Snippet</a>
+            
+        </div>
+        <div>
+            
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/2018/11/09/Java异常学习笔记/" class="pre-post btn btn-default" title="Java异常学习笔记">
+            <i class="fa fa-angle-left fa-fw"></i><span class="hidden-lg">上一篇</span>
+            <span class="hidden-xs">Java异常学习笔记</span>
+        </a>
+    
+    
+        <a href="/2018/11/09/log4j配置及组件详解/" class="next-post btn btn-default" title="log4j配置及组件详解">
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">log4j配置及组件详解</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+    <div id="comments">
+        
+    
+    <div id="vcomments" class="valine"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="/assets/valine.min.js"></script>
+
+    <script>
+        new Valine({
+            av: AV,
+            el: '#vcomments',
+            appId: 'xOKV9J4UeQAtVkvnJC7Kq2Jn-gzGzoHsz',
+            appKey: 'erIpQac4azoCmgfBB7Dl9maa',
+            placeholder: '说点什么吧',
+            notify: false,
+            verify: false,
+            avatar: 'mm',
+            meta: 'nick,mail'.split(','),
+            pageSize: '10',
+            path: window.location.pathname,
+            lang: 'zh-CN'.toLowerCase()
+        })
+    </script>
+
+
+    </div>
+
+
+
+
+
+                </main>
+                
+                    <aside id="article-toc" role="navigation" class="col-md-4">
+    <div class="widget">
+        <h3 class="title">文章目录</h3>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#samba简介"><span class="toc-text">samba简介:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一、Samba服务器安装及配置"><span class="toc-text">一、Samba服务器安装及配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-安装samba服务"><span class="toc-text">1.安装samba服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-备份samba配置文件"><span class="toc-text">2.备份samba配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-创建共享目录"><span class="toc-text">3.创建共享目录</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-修改配置文件-sudo-vim-etc-samba-smb-conf"><span class="toc-text">4.修改配置文件 $ sudo vim /etc/samba/smb.conf</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-samba服务相关命令"><span class="toc-text">5.samba服务相关命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-samba服务器卸载"><span class="toc-text">6.samba服务器卸载</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、Samba用户管理"><span class="toc-text">二、Samba用户管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#一、创建samba用户"><span class="toc-text">一、创建samba用户</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、客户端访问-ubuntu"><span class="toc-text">三、客户端访问(ubuntu)</span></a></li></ol>
+        
+    </div>
+</aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+                <span>Copyright &copy; 2017
+                </span> |
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/shenliyang/hexo-theme-snippet.git" class="copyright-links" target="_blank" rel="nofollow">Snippet</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>
