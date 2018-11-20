@@ -43,9 +43,9 @@
 
 
 
-<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
-<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
-<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+<link rel="stylesheet" href="/blog/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/blog/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/blog/css/style.css?rev=@@hash">
 
 
 
@@ -80,7 +80,7 @@
     <header class="main-header" style="background-image:url(http://snippet.shenliyang.com/img/banner.jpg)">
     <div class="main-header-box">
         <a class="header-avatar" href="/" title="石鹏">
-            <img src="/img/avatar.jpg" alt="logo头像" class="img-responsive center-block">
+            <img src="/blog/img/avatar.jpg" alt="logo头像" class="img-responsive center-block">
         </a>
         <div class="branding">
         	<!--<h2 class="text-hide">Snippet主题,从未如此简单有趣</h2>-->
@@ -189,7 +189,7 @@
         <p>在Java关键字中，static是我们非常熟悉的一个关键字，在一定的环境下使用，可以提高程序的性能、优化程序的结构。static表示“全局”或者“静态”的意思，主要用来修饰成员变量、成员方法和静态块。</p>
 <h2 id="一、修饰成员变量"><a href="#一、修饰成员变量" class="headerlink" title="一、修饰成员变量"></a><strong>一、修饰成员变量</strong></h2><p>static修饰的变量称为静态变量或类变量，被static修饰的变量独立于该类的任何对象，它不依赖类特定的实例，被类的所有实例所共享。在使用时直接用类名.变量名的方式访问该类的静态成员，静态变量在类装载的时候JVM就会为其分配内存空间，并且一个static变量只会有一个内存空间，也就是说无论有多少个类的实例，这些实例中的这个static变量会共享同一个内存空间。</p>
 <h4 id="1-静态成员变量在内存中的分布"><a href="#1-静态成员变量在内存中的分布" class="headerlink" title="1.静态成员变量在内存中的分布"></a>1.静态成员变量在内存中的分布</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    String name;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Name:"</span>+name+<span class="string">",Age:"</span>+age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</span><br><span class="line">        User user1 = <span class="keyword">new</span> User();</span><br><span class="line">        user1.name = <span class="string">"张三"</span>;</span><br><span class="line">        user1.age = <span class="number">29</span>;</span><br><span class="line">        User user2 = <span class="keyword">new</span> User();</span><br><span class="line">        user2.name = <span class="string">"李四"</span>;</span><br><span class="line">        user2.age = <span class="number">37</span>;</span><br><span class="line">        System.out.println(user1);</span><br><span class="line">        System.out.println(user2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<img src="/2018/11/08/java-static关键字/java-static.png" title="jvm">
+<img src="/blog/2018/11/08/java-static关键字/java-static.png" title="jvm">
 <p>由上图可以看出main方法中user1和user2两个变量引用的对象分别存储在堆的不同区域，所以他们之间不会互相干扰。对象的成员变量由每个对象自己保存，而对象的方法是指向了静态方法区的方法定义。</p>
 <p>方法区是Java堆中的一个逻辑区域，也是所有线程所共享的区域，它用于存储已被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。</p>
 <p>同样的静态变量count也是User类的所属，而不属于某个具体对象，也就是说如果其中一个对象修改了count属性，其它的对象都会受到影响。</p>
@@ -242,7 +242,7 @@
 
 <div class="article-nav prev-next-wrap clearfix">
     
-        <a href="/2018/11/09/log4j配置及组件详解/" class="pre-post btn btn-default" title="log4j配置及组件详解">
+        <a href="/blog/2018/11/09/log4j配置及组件详解/" class="pre-post btn btn-default" title="log4j配置及组件详解">
             <i class="fa fa-angle-left fa-fw"></i><span class="hidden-lg">上一篇</span>
             <span class="hidden-xs">log4j配置及组件详解</span>
         </a>
@@ -256,7 +256,7 @@
     
     <div id="vcomments" class="valine"></div>
     <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-<script src="/assets/valine.min.js"></script>
+<script src="/blog/assets/valine.min.js"></script>
 
     <script>
         new Valine({
@@ -340,7 +340,7 @@
 
 
 
-<script src="/js/app.js?rev=@@hash"></script>
+<script src="/blog/js/app.js?rev=@@hash"></script>
 
 </body>
 </html>
