@@ -43,9 +43,9 @@
 
 
 
-<link rel="stylesheet" href="/blog/css/bootstrap.min.css?rev=3.3.7">
-<link rel="stylesheet" href="/blog/css/font-awesome.min.css?rev=4.5.0">
-<link rel="stylesheet" href="/blog/css/style.css?rev=@@hash">
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
 
 
 
@@ -80,7 +80,7 @@
     <header class="main-header" style="background-image:url(http://snippet.shenliyang.com/img/banner.jpg)">
     <div class="main-header-box">
         <a class="header-avatar" href="/" title="石鹏">
-            <img src="/blog/img/avatar.jpg" alt="logo头像" class="img-responsive center-block">
+            <img src="/img/avatar.jpg" alt="logo头像" class="img-responsive center-block">
         </a>
         <div class="branding">
         	<!--<h2 class="text-hide">Snippet主题,从未如此简单有趣</h2>-->
@@ -108,19 +108,19 @@
                             </li>
                         
                             <li role="presentation" class="text-center">
-                                <a href="/blog/categories/程序设计/"><i class="fa "></i>程序设计</a>
+                                <a href="/categories/程序设计/"><i class="fa "></i>程序设计</a>
                             </li>
                         
                             <li role="presentation" class="text-center">
-                                <a href="/blog/categories/技术杂谈/"><i class="fa "></i>技术杂谈</a>
+                                <a href="/categories/技术杂谈/"><i class="fa "></i>技术杂谈</a>
                             </li>
                         
                             <li role="presentation" class="text-center">
-                                <a href="/blog/categories/"><i class="fa "></i>读书生活</a>
+                                <a href="/categories/"><i class="fa "></i>读书生活</a>
                             </li>
                         
                             <li role="presentation" class="text-center">
-                                <a href="/blog/archives/"><i class="fa "></i>时间轴</a>
+                                <a href="/archives/"><i class="fa "></i>时间轴</a>
                             </li>
                         
                     </ul>
@@ -194,7 +194,7 @@
 <h4 id="4-1-web-xml中修改log4j-properties文件名称及路径"><a href="#4-1-web-xml中修改log4j-properties文件名称及路径" class="headerlink" title="4.1 web.xml中修改log4j.properties文件名称及路径"></a>4.1 web.xml中修改log4j.properties文件名称及路径</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context-param</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>log4jConfigLocation<span class="tag">&lt;/<span class="name">param-name</span> &gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>classpath:log4j.properties<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">context-param</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <h4 id="4-2-log4j-properties文件配置示例"><a href="#4-2-log4j-properties文件配置示例" class="headerlink" title="4.2 log4j.properties文件配置示例"></a>4.2 log4j.properties文件配置示例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">######配置输出日志的目录和输出日志的级别##########</span><br><span class="line">#rootLogger:设置输出根目录(classpath)下所有配置了Logger对象的日志</span><br><span class="line">#第一个参数Debug: 输出什么级别的日志</span><br><span class="line">#第二个参数stout: 输出哪个Appender(可配置多个Appender，如:DF_DEBUG,DF_ERROR)</span><br><span class="line">#log4j.logger.cn.ship.log4j=warn,stout :输出cn.ship.log4j包下的配置了Logger对象的日志，如果指定包下的日志级别小于rootLogger，则指定包下的日志按当前配置级别输出</span><br><span class="line">#log4j.logger.test = warn,stout:基于Logger名称的访问,需要在创建logger对象的时候用名称指定(参见创建Logger第二种形式)</span><br><span class="line">#############################################</span><br><span class="line"></span><br><span class="line">log4j.rootLogger=debug,stout,DF_DEBUG,DF_ERROR</span><br><span class="line">log4j.logger.cn.ship.log4j=warn,stout</span><br><span class="line">log4j.logger.test = warn,stout</span><br><span class="line"></span><br><span class="line">##################控制台输出##################</span><br><span class="line">#log4j.appender.stout : 指定采用那种方式进行日志输出(控制台方式)，stout为用户自定义appender名称</span><br><span class="line">#log4j.appender.stout.Target : 采用System.out方式进行输出，还可以使用System.err</span><br><span class="line">#log4j.appender.stout.layout : 指定当前Appender的日志的布局模式(当前选用PatternLayout模式)</span><br><span class="line">#log4j.appender.stout.layout.ConversionPattern : 指定PatternLayout模式的日志格式</span><br><span class="line">############################################</span><br><span class="line"></span><br><span class="line">log4j.appender.stout=org.apache.log4j.ConsoleAppender</span><br><span class="line">log4j.appender.stout.Target=System.out</span><br><span class="line">log4j.appender.stout.layout=org.apache.log4j.PatternLayout</span><br><span class="line">log4j.appender.stout.layout.ConversionPattern= [%5p] %d&#123;yyyy-MM-dd HH:mm:ss,SSS&#125; method:%l%n%m%n</span><br><span class="line"></span><br><span class="line">##################滚动文件输出(DEBUG级别)##################</span><br><span class="line">log4j.appender.DF_DEBUG=org.apache.log4j.DailyRollingFileAppender</span><br><span class="line">log4j.appender.DF_DEBUG.File=/home/ship/log/debug.log</span><br><span class="line">log4j.appender.DF_DEBUG.Threshold=DEBUG</span><br><span class="line">log4j.appender.DF_DEBUG.DatePattern=&apos;.&apos;yyyy-MM-dd&apos;</span><br><span class="line">log4j.appender.DF_DEBUG.layout=org.apache.log4j.PatternLayout</span><br><span class="line">log4j.appender.DF_DEBUG.layout.ConversionPattern=%d&#123;yyyy-MM-dd HH:mm:ss&#125; [ %t:%r ] - [ %p ]  %m%n</span><br><span class="line"></span><br><span class="line">##################滚动文件输出(ERROR级别)##################</span><br><span class="line">log4j.appender.DF_ERROR=org.apache.log4j.DailyRollingFileAppender</span><br><span class="line">log4j.appender.DF_ERROR.File=/home/ship/log/error.log</span><br><span class="line">log4j.appender.DF_ERROR.Threshold=ERROR</span><br><span class="line">log4j.appender.DF_ERROR.DatePattern=&apos;.&apos;yyyy-MM-dd&apos;</span><br><span class="line">log4j.appender.DF_ERROR.layout=org.apache.log4j.PatternLayout</span><br><span class="line">log4j.appender.DF_ERROR.layout.ConversionPattern=%d&#123;yyyy-MM-dd HH:mm:ss&#125; [ %t:%r ] - [ %p ]  %m%n</span><br></pre></td></tr></table></figure>
 <hr>
-<h2 id="二、Log4j组件"><a href="#二、Log4j组件" class="headerlink" title="二、Log4j组件"></a><strong>二、Log4j组件</strong></h2><img src="/blog/2018/11/09/log4j配置及组件详解/log4j.png" title="log4j">
+<h2 id="二、Log4j组件"><a href="#二、Log4j组件" class="headerlink" title="二、Log4j组件"></a><strong>二、Log4j组件</strong></h2><img src="/2018/11/09/log4j配置及组件详解/log4j.png" title="log4j">
 <p>通过log4j结构图可以看出Log4j分别由Logger(日志写入器)、日志输出终端(Appender)、日志布局模式(Layout)三个重要组件构成。其中一个Logger对应多个Appender，一个Appender包含一种日志布局模式。</p>
 <h3 id="1-日志写入器-Logger"><a href="#1-日志写入器-Logger" class="headerlink" title="1. 日志写入器(Logger)"></a><strong>1. 日志写入器(Logger)</strong></h3><p>Logger主要负责记录日志信息，根据日志信息的重要程度，Logger对象共分为以下几种日志级别，从高到底分别为:</p>
 <table>
@@ -392,13 +392,13 @@
 
 <div class="article-nav prev-next-wrap clearfix">
     
-        <a href="/blog/2018/11/09/Ubuntu下Samba安装配置及使用/" class="pre-post btn btn-default" title="Ubuntu下Samba安装配置及使用">
+        <a href="/2018/11/09/Ubuntu下Samba安装配置及使用/" class="pre-post btn btn-default" title="Ubuntu下Samba安装配置及使用">
             <i class="fa fa-angle-left fa-fw"></i><span class="hidden-lg">上一篇</span>
             <span class="hidden-xs">Ubuntu下Samba安装配置及使用</span>
         </a>
     
     
-        <a href="/blog/2018/11/08/java-static关键字/" class="next-post btn btn-default" title="java static关键字">
+        <a href="/2018/11/08/java-static关键字/" class="next-post btn btn-default" title="java static关键字">
             <span class="hidden-lg">下一篇</span>
             <span class="hidden-xs">java static关键字</span><i class="fa fa-angle-right fa-fw"></i>
         </a>
@@ -411,7 +411,7 @@
     
     <div id="vcomments" class="valine"></div>
     <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-<script src="/blog/assets/valine.min.js"></script>
+<script src="/assets/valine.min.js"></script>
 
     <script>
         new Valine({
@@ -495,7 +495,7 @@
 
 
 
-<script src="/blog/js/app.js?rev=@@hash"></script>
+<script src="/js/app.js?rev=@@hash"></script>
 
 </body>
 </html>
